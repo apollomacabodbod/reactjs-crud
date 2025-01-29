@@ -31,7 +31,6 @@ const AddAndDisplayData: React.FC = () => {
         setDataList(fetchedData);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
     }
   };
 
@@ -50,7 +49,6 @@ const AddAndDisplayData: React.FC = () => {
       setIsModalOpen(false);
       fetchData();
     } catch (error) {
-      console.error("Error posting data:", error);
     }
   };
 
@@ -70,7 +68,6 @@ const AddAndDisplayData: React.FC = () => {
       setIsModalOpen(false);
       fetchData();
     } catch (error) {
-      console.error("Error updating data:", error);
     }
   };
 
@@ -83,7 +80,6 @@ const AddAndDisplayData: React.FC = () => {
 
       fetchData();
     } catch (error) {
-      console.error("Error deleting data:", error);
     }
   };
 
