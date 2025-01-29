@@ -14,91 +14,79 @@ const AddAndDisplayData: React.FC = () => {
     date_completed: '',
     id: 0,
   });
-  
+
   const [dataList, setDataList] = useState<DataItem[]>([]);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const modalRef = useRef<HTMLDivElement | null>(null); // Reference for the modal content
 
-  // Fetch existing data from the API
+  // fetchData function
   const fetchData = async () => {
     try {
-      const response = await fetch('https://faux-api.com/api/v1/todo_17484665438427394', {
-        method: 'GET',
-      });
-      const result = await response.json();
+      const response = await fetch('https://faux-api.com/api/v1/todo_17484665438427394');
+      const { result: fetchedData, status } = await response.json();
 
-      if (result.status === "success") {
-        setDataList(result.result); // Set the data from the result array
-      } else {
+      if (status === "success") {
+        setDataList(fetchedData);
       }
     } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
 
-  // Function to submit new data (POST)
+  // handlePost function
   const handlePost = async () => {
-    const url = 'https://faux-api.com/api/v1/todo_17484665438427394';
-    const body = JSON.stringify([formData]);
-
     try {
-      const response = await fetch(url, {
+      const response = await fetch('https://faux-api.com/api/v1/todo_17484665438427394', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([formData]),
       });
-      const result = await response.json();
 
-      // Clear the form and fetch the updated data list
+      await response.json(); // Remove unused variable
+
       setFormData({ Title: '', date_added: '', date_completed: '', id: 0 });
       setIsModalOpen(false);
-      fetchData(); // Re-fetch data after successful submission
+      fetchData();
     } catch (error) {
+      console.error("Error posting data:", error);
     }
   };
 
-  // Function to update existing data (PUT)
+  // handlePut function
   const handlePut = async () => {
-    const url = `https://faux-api.com/api/v1/todo_17484665438427394/${editingItemId}`;
-    const body = JSON.stringify([formData]);
-
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`https://faux-api.com/api/v1/todo_17484665438427394/${editingItemId}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([formData]),
       });
-      const result = await response.json();
 
-      // Clear the form and fetch the updated data list
+      await response.json(); // Remove unused variable
+
       setFormData({ Title: '', date_added: '', date_completed: '', id: 0 });
-      setEditingItemId(null); // Reset editing mode
+      setEditingItemId(null);
       setIsModalOpen(false);
-      fetchData(); // Re-fetch data after successful submission
+      fetchData();
     } catch (error) {
+      console.error("Error updating data:", error);
     }
   };
 
-  // Function to delete existing data (DELETE)
+  // deleteData function
   const deleteData = async (id: number) => {
-    const url = `https://faux-api.com/api/v1/todo_17484665438427394/${id}`;
-
     try {
-      const response = await fetch(url, {
+      await fetch(`https://faux-api.com/api/v1/todo_17484665438427394/${id}`, {
         method: 'DELETE',
       });
-      const data = await response.json();
 
-      // Re-fetch the data list after deletion
-      fetchData(); // Update the data list after successful deletion
+      fetchData();
     } catch (error) {
+      console.error("Error deleting data:", error);
     }
   };
+
 
   // Handle form changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
